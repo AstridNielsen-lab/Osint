@@ -232,7 +232,7 @@ function displayResults(data) {
 
 // Gerar HTML do relatório
 function generateReportHTML(data) {
-    const timestamp = new Date(data.timestamp).toLocaleString('pt-BR');
+    const timestamp = new Date().toLocaleString('pt-BR');
     
     return `
         <div class="report-section">
@@ -246,51 +246,46 @@ function generateReportHTML(data) {
                     <strong>Data da Análise:</strong><br>
                     ${timestamp}
                 </div>
+                <div class="data-item">
+                    <strong>Status:</strong><br>
+                    ${data.status}
+                </div>
             </div>
         </div>
         
         <div class="report-section">
             <h3><i class="fas fa-database"></i> Dados WHOIS</h3>
-            ${generateWhoisSection(data.whois_data)}
+            ${generateWhoisSection(data.whois)}
         </div>
         
         <div class="report-section">
-            <h3><i class="fas fa-search"></i> Informações Extraídas</h3>
-            ${generateExtractedInfoSection(data.extracted_info)}
-        </div>
-        
-        <div class="report-section">
-            <h3><i class="fas fa-brain"></i> Análise Inteligente</h3>
-            <div class="gemini-analysis">
-                ${formatAnalysisText(data.gemini_analysis)}
-            </div>
+            <h3><i class="fas fa-brain"></i> Análise de Segurança</h3>
+            ${generateAnalysisSection(data.analysis)}
         </div>
         
         <div class="report-section">
             <h3><i class="fas fa-shield-alt"></i> Disclaimer</h3>
-            <p><em>${data.disclaimer}</em></p>
+            <p><em>Esta análise utiliza apenas informações públicas disponíveis. Os dados apresentados são para fins educacionais e de pesquisa. Use com responsabilidade.</em></p>
         </div>
     `;
 }
 
 // Gerar seção WHOIS
 function generateWhoisSection(whoisData) {
-    if (whoisData.error) {
-        return `<p class="error">Erro ao obter dados WHOIS: ${whoisData.error}</p>`;
+    if (!whoisData) {
+        return `<p class="error">Dados WHOIS simulados para demonstração</p>`;
     }
     
-    const importantFields = {
+    const fields = {
         'registrar': 'Registrador',
-        'creation_date': 'Data de Criação',
-        'expiration_date': 'Data de Expiração',
-        'updated_date': 'Última Atualização',
-        'status': 'Status',
-        'name_servers': 'Servidores DNS'
+        'created': 'Data de Criação',
+        'expires': 'Data de Expiração',
+        'nameservers': 'Servidores DNS'
     };
     
     let html = '<div class="data-grid">';
     
-    for (const [key, label] of Object.entries(importantFields)) {
+    for (const [key, label] of Object.entries(fields)) {
         if (whoisData[key]) {
             let value = whoisData[key];
             if (Array.isArray(value)) {
@@ -306,6 +301,46 @@ function generateWhoisSection(whoisData) {
     }
     
     html += '</div>';
+    return html;
+}
+
+// Gerar seção de análise de segurança
+function generateAnalysisSection(analysisData) {
+    if (!analysisData) {
+        return '<p>Análise não disponível.</p>';
+    }
+    
+    let html = '<div class="data-grid">';
+    
+    // Score de segurança
+    if (analysisData.security_score) {
+        const scoreColor = analysisData.security_score >= 80 ? 'green' :
+                          analysisData.security_score >= 60 ? 'orange' : 'red';
+        
+        html += `
+            <div class="data-item">
+                <strong>Score de Segurança:</strong><br>
+                <span style="color: ${scoreColor}; font-size: 1.2em; font-weight: bold;">
+                    ${analysisData.security_score}/100
+                </span>
+            </div>
+        `;
+    }
+    
+    html += '</div>';
+    
+    // Recomendações
+    if (analysisData.recommendations && analysisData.recommendations.length > 0) {
+        html += `
+            <div class="recommendations">
+                <h4><i class="fas fa-lightbulb"></i> Recomendações:</h4>
+                <ul class="data-list">
+                    ${analysisData.recommendations.map(rec => `<li>${rec}</li>`).join('')}
+                </ul>
+            </div>
+        `;
+    }
+    
     return html;
 }
 
