@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OSINT Cascade Search - Análise de Domínios</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="nav">
+                <div class="logo">
+                    <i class="fas fa-search-location"></i>
+                    <span>OSINT Cascade Search</span>
+                </div>
+                <nav class="nav-links">
+                    <a href="#home">Início</a>
+                    <a href="#features">Recursos</a>
+                    <a href="#disclaimer">Aviso Legal</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-text">
+                    <h1>Análise OSINT Profissional</h1>
+                    <p>Realize investigações completas de domínios usando fontes públicas. Colete dados WHOIS, informações de registrante e gere relatórios profissionais com inteligência artificial.</p>
+                    
+                    <!-- Formulário de Busca -->
+                    <div class="search-form">
+                        <div class="input-group">
+                            <i class="fas fa-globe"></i>
+                            <input type="text" id="domainInput" placeholder="Digite um domínio (ex: exemplo.com)" />
+                            <button id="searchBtn" class="search-btn">
+                                <span class="btn-text">Analisar</span>
+                                <i class="fas fa-search"></i>
+                            </button>
+                        </div>
+                        <div class="search-examples">
+                            <span>Exemplos:</span>
+                            <button class="example-btn" onclick="setExample('google.com')">google.com</button>
+                            <button class="example-btn" onclick="setExample('github.com')">github.com</button>
+                            <button class="example-btn" onclick="setExample('stackoverflow.com')">stackoverflow.com</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="hero-image">
+                    <img src="assets/images/osint_hero.jpg" alt="OSINT Analysis" />
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="features">
+        <div class="container">
+            <h2>Recursos Disponíveis</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-database"></i>
+                    </div>
+                    <h3>Dados WHOIS</h3>
+                    <p>Coleta completa de informações de registro do domínio, incluindo registrante, datas e servidores DNS.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-search"></i>
+                    </div>
+                    <h3>Busca em Cascata</h3>
+                    <p>Análise automática de dados relacionados: emails, telefones, endereços e informações corporativas.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-brain"></i>
+                    </div>
+                    <h3>Análise IA</h3>
+                    <p>Interpretação inteligente dos dados coletados com recomendações de segurança e insights profissionais.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-file-pdf"></i>
+                    </div>
+                    <h3>Relatórios</h3>
+                    <p>Geração automática de relatórios profissionais em PDF e HTML para documentação completa.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3>Fontes Públicas</h3>
+                    <p>Utiliza exclusivamente informações disponíveis publicamente, respeitando todas as políticas de privacidade.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <h3>Análise Rápida</h3>
+                    <p>Resultados em tempo real com interface responsiva e feedback visual do progresso da análise.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Loading Modal -->
+    <div id="loadingModal" class="modal">
+        <div class="modal-content">
+            <div class="loading-content">
+                <div class="spinner"></div>
+                <h3>Analisando Domínio</h3>
+                <p id="loadingText">Iniciando análise OSINT...</p>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Results Section -->
+    <section id="results" class="results" style="display: none;">
+        <div class="container">
+            <div class="results-header">
+                <h2>Relatório de Análise OSINT</h2>
+                <div class="export-buttons">
+                    <button class="export-btn" onclick="exportReport('pdf')">
+                        <i class="fas fa-file-pdf"></i> Exportar PDF
+                    </button>
+                    <button class="export-btn" onclick="exportReport('html')">
+                        <i class="fas fa-file-code"></i> Exportar HTML
+                    </button>
+                </div>
+            </div>
+            <div id="reportContent" class="report-content">
+                <!-- Conteúdo do relatório será inserido aqui -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Disclaimer Section -->
+    <section id="disclaimer" class="disclaimer">
+        <div class="container">
+            <div class="disclaimer-content">
+                <h2>Aviso Legal e Responsabilidade</h2>
+                <div class="disclaimer-text">
+                    <p><strong>Uso Responsável:</strong> Esta ferramenta utiliza exclusivamente informações disponíveis publicamente através de fontes legítimas como registros WHOIS e outras bases de dados públicas.</p>
+                    
+                    <p><strong>Conformidade Legal:</strong> Todas as informações coletadas respeitam as políticas de privacidade vigentes e a Lei Geral de Proteção de Dados (LGPD). Não realizamos acesso não autorizado a sistemas ou dados privados.</p>
+                    
+                    <p><strong>Finalidade:</strong> Esta ferramenta destina-se a profissionais de segurança da informação, pesquisadores e analistas para fins legítimos de investigação e análise de segurança.</p>
+                    
+                    <p><strong>Responsabilidade:</strong> O usuário é responsável pelo uso ético e legal das informações obtidas. Não nos responsabilizamos pelo uso inadequado ou ilegal dos dados fornecidos.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>OSINT Cascade Search</h3>
+                    <p>Ferramenta profissional para análise de domínios usando fontes públicas.</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Recursos</h3>
+                    <ul>
+                        <li><a href="#features">Funcionalidades</a></li>
+                        <li><a href="#disclaimer">Aviso Legal</a></li>
+                        <li><a href="#home">Análise de Domínio</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Contato</h3>
+                    <p>Para suporte técnico ou dúvidas sobre o uso responsável da ferramenta.</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 OSINT Cascade Search. Todos os direitos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
+
